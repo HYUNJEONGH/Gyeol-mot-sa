@@ -28,6 +28,8 @@ public class QuestionController {
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/questions/" + chkQuest.getNum(), updateValues);
 
+        Log.v(TAG, "send data to server...");
+
         FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
     }
 
@@ -65,4 +67,18 @@ public class QuestionController {
             }
         });
     }
+
+
+    //테스트용
+    public static void createQuestion(String num, String userId, String question, String choice1, String choice2, String choice3, String choice4, Long choice1Count, Long choice2Count, Long choice3Count, Long choice4Count, Boolean isEnd, String endTIme, Long endCount) {
+
+        Question newQuestion = new Question(num, userId, question, choice1, choice2, choice3, choice4, choice1Count, choice2Count, choice3Count, choice4Count, isEnd, endTIme, endCount);
+        final Map<String, Object> newQuestionValues = newQuestion.makeQuestionMap();
+
+        Map<String, Object> newQuestionMap = new HashMap<>();
+        newQuestionMap.put("/questions/question" + num, newQuestionValues);
+
+        FirebaseDatabase.getInstance().getReference().updateChildren(newQuestionMap);
+    }
+
 }

@@ -12,9 +12,9 @@ import com.teamgms.gms.gms.R;
 import com.teamgms.gms.gms.controllers.QuestionController;
 import com.teamgms.gms.gms.models.Question;
 
-/*
-* Select a decision and send it to the server.
-* */
+/**
+ *  Select a decision and send it to the server.
+ */
 public class SendChoice extends AppCompatActivity {
     private final String TAG = SendChoice.class.getSimpleName();
 
@@ -24,8 +24,6 @@ public class SendChoice extends AppCompatActivity {
     private RadioButton rb_three;
     private RadioButton rb_four;
     private TextView tv_question;
-
-    //private ValueEventListener mReadListner;
 
     Question chkQuest;
     private int choice; //user decision
@@ -62,9 +60,9 @@ public class SendChoice extends AppCompatActivity {
         rb_four.setText(chkQuest.choice4);
     }
 
-    /*
-    * operates when the user selects the radio button.
-    * */
+    /**
+     * operates when the user selects the radio button.
+     */
     protected RadioGroup.OnCheckedChangeListener choiceChange = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -117,6 +115,8 @@ public class SendChoice extends AppCompatActivity {
                 count = count+ 1;
 
                 QuestionController.updateChoice(chkQuest);
+
+                finish();
             }
         }
     }
