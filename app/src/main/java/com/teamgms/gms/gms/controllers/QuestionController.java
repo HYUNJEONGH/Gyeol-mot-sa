@@ -55,6 +55,9 @@ public class QuestionController {
                 question.choice3Count = mChkQuest.getChoice3Count();
                 question.choice4Count = mChkQuest.getChoice4Count();
 
+                //여기서 쓰는게 맞는지 onComplete안에서 쓰는게 맞는지 테스트 해보기...
+                //NumController.updateNum(mChkQuest.userId, mChkQuest.num);
+
                 // Set value and report transaction success
                 mutableData.setValue(question);
                 return Transaction.success(mutableData);
@@ -64,6 +67,8 @@ public class QuestionController {
                                    DataSnapshot dataSnapshot) {
                 // Transaction completed
                 Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+
+                NumController.updateNum(mChkQuest.userId, mChkQuest.num);
             }
         });
     }
