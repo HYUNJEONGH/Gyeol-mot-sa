@@ -18,6 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SendQuestionActivity" />
+        <activity android:name=".activities.TestActivity" />
+        <activity android:name=".activities.ResultActivity"></activity>
     </application>
 
 </manifest>

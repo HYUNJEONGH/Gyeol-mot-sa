@@ -44,4 +44,32 @@ public class ServerConfigureController {
             }
         });
     }
+
+    public static void getServerConfigure(Handler serverConfigureReceiveHandler) {
+        final DatabaseReference serverConfigureReference = FirebaseDatabase.getInstance().getReference().child("serverConfigure");
+        final Handler serverConfigureDeliveryHandler = serverConfigureReceiveHandler;
+
+        serverConfigureReference.runTransaction(new Transaction.Handler() {
+            ServerConfigure serverConfigure = null;
+
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                serverConfigure = mutableData.getValue(ServerConfigure.class);
+                if(serverConfigure == null)
+                    return Transaction.success(mutableData);
+
+                mutableData.setValue(serverConfigure);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                Message msg = serverConfigureDeliveryHandler.obtainMessage();
+                msg.what = SendQuestionActivity.FLAG_GET_SERVERCONFIGURE;
+                msg.obj = serverConfigure;
+
+                serverConfigureDeliveryHandler.sendMessage(msg);
+            }
+        });
+    }
 }

@@ -28,4 +28,26 @@ public class QuestionUtils {
 
         return questionMap;
     }
+
+    public static Question parseQuestionDataSnapshot(DataSnapshot dataSnapshot) {
+        Question question = new Question();
+
+        question.setUserId((String)dataSnapshot.child("userId").getValue());
+        question.setNum((Long)dataSnapshot.child("num").getValue());
+        question.setQuestion((String)dataSnapshot.child("question").getValue());
+        question.setChoice1((String)dataSnapshot.child("choice1").getValue());
+        question.setChoice2((String)dataSnapshot.child("choice2").getValue());
+        question.setChoice3((String)dataSnapshot.child("choice3").getValue());
+        question.setChoice4((String)dataSnapshot.child("choice4").getValue());
+        question.setChoice1Count((Long)dataSnapshot.child("choice1Count").getValue());
+        question.setChoice2Count((Long)dataSnapshot.child("choice2Count").getValue());
+        question.setChoice3Count((Long)dataSnapshot.child("choice3Count").getValue());
+        question.setChoice4Count((Long)dataSnapshot.child("choice4Count").getValue());
+        question.setIsEnd((Boolean)dataSnapshot.child("isEnd").getValue());
+        question.setEndTime((String)dataSnapshot.child("endTime").getValue());
+        question.setEndCount((Long)dataSnapshot.child("endCount").getValue());
+        question.setIsChecked((Boolean)dataSnapshot.child("isChecked").getValue());
+
+        return question;
+    }
 }

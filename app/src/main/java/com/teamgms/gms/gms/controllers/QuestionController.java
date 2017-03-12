@@ -24,4 +24,8 @@ public class QuestionController {
         FirebaseDatabase.getInstance().getReference().updateChildren(newQuestionMap);
     }
 
+    public static DatabaseReference receiveAllQuestions() {
+        return FirebaseDatabase.getInstance().getReference().child("questions");
+    }
+
 }

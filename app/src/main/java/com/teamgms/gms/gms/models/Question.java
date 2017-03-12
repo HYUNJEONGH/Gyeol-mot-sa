@@ -2,7 +2,7 @@ package com.teamgms.gms.gms.models;
 
 import java.io.Serializable;
 
-public class Question {
+public class Question implements Serializable {
     private String userId;
 
     private Long num;
