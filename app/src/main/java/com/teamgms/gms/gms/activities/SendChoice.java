@@ -36,8 +36,6 @@ public class SendChoice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_choice);
 
-        Log.v(TAG, "start SendChoice");
-
         chkQuest = (Question)getIntent().getSerializableExtra("question");
         numberList = (NumberList)getIntent().getSerializableExtra("numberList");
 
@@ -65,10 +63,10 @@ public class SendChoice extends AppCompatActivity {
 
         choice = 0;
         tv_question.setText(chkQuest.getQuestion());
-        rb_one.setText(chkQuest.choice1);
-        rb_two.setText(chkQuest.choice2);
-        rb_three.setText(chkQuest.choice3);
-        rb_four.setText(chkQuest.choice4);
+        rb_one.setText(chkQuest.getChoice1());
+        rb_two.setText(chkQuest.getChoice2());
+        rb_three.setText(chkQuest.getChoice3());
+        rb_four.setText(chkQuest.getChoice4());
 
         numberList.setOnSendNumCB(callBack);
     }
@@ -77,7 +75,7 @@ public class SendChoice extends AppCompatActivity {
         @Override
         public void onSendNum(boolean finish) {
             if(finish) {
-                Log.v(TAG, "ACTIVITY FINISH");
+                Log.v(TAG, "SEND NUM, ACTIVITY FINISH");
                 finish();
             }
         }
@@ -115,29 +113,29 @@ public class SendChoice extends AppCompatActivity {
             if(choice != 0) {
                 switch (choice) {
                     case 1:
-                        count = chkQuest.choice1Count;
+                        count = chkQuest.getChoice1Count();
                         count = count+ 1;
-                        chkQuest.choice1Count = count;
+                        chkQuest.setChoice1Count(count);
                         break;
                     case 2:
-                        count = chkQuest.choice2Count;
+                        count = chkQuest.getChoice2Count();
                         count = count+ 1;
-                        chkQuest.choice2Count = count;
+                        chkQuest.setChoice2Count(count);
                         break;
                     case 3:
-                        count = chkQuest.choice3Count;
+                        count = chkQuest.getChoice3Count();
                         count = count+ 1;
-                        chkQuest.choice3Count = count;
+                        chkQuest.setChoice3Count(count);
                         break;
                     case 4:
-                        count = chkQuest.choice4Count;
+                        count = chkQuest.getChoice4Count();
                         count = count+ 1;
-                        chkQuest.choice4Count = count;
+                        chkQuest.setChoice4Count(count);
                         break;
                 }
                 count = count+ 1;
 
-                chkQuest.endCount = chkQuest.endCount - 1;
+                chkQuest.setIsChecked(false);
 
                 QuestionController.updateChoice(chkQuest, numberList);
             }

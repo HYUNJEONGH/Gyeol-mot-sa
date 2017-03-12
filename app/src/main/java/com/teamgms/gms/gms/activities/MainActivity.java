@@ -1,25 +1,20 @@
 package com.teamgms.gms.gms.activities;
 
 import android.content.Intent;
-
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,30 +22,33 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.teamgms.gms.gms.BaseActivity;
 import com.teamgms.gms.gms.Config;
+import com.teamgms.gms.gms.R;
+import com.teamgms.gms.gms.controllers.QuestionController;
+import com.teamgms.gms.gms.controllers.ServerConfigureController;
+import com.teamgms.gms.gms.models.NumberList;
+import com.teamgms.gms.gms.models.Question;
+import com.teamgms.gms.gms.models.ServerConfigure;
 import com.teamgms.gms.gms.models.User;
+import com.teamgms.gms.gms.utils.QuestionUtils;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import com.google.firebase.database.FirebaseDatabase;
-import com.teamgms.gms.gms.models.NumberList;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-import com.google.firebase.database.ValueEventListener;
-import com.teamgms.gms.gms.R;
-import com.teamgms.gms.gms.controllers.QuestionController;
-import com.teamgms.gms.gms.controllers.ServerConfigureController;
-import com.teamgms.gms.gms.models.Question;
-import com.teamgms.gms.gms.models.ServerConfigure;
-import com.teamgms.gms.gms.utils.QuestionUtils;
-import java.util.Iterator;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
     private final String TAG = MainActivity.class.getSimpleName();
     private static String userId;
-    private String mFirebaseUid;
     private ArrayList<String> numList;
     private NumberList numberList;
     final static int FLAG_GET_SERVERCONFIGURE = 100;
@@ -75,16 +73,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //UserUtil 클래스가 아직 없어서 주석처리.
-        //mFirebaseUid = UserUtil.loadUserFirebaseUid(this);
-
-        //테스트용
-        mFirebaseUid = "123";
-
         numList = new ArrayList<String> ();
         numberList = new NumberList();
-        numberList.setNumList("");
-
         //numberList.setNFinish();
 
         userId = "tempUserId";
@@ -122,8 +112,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onStart() {
         super.onStart();
 
-
         getResponsedNum();
+
         DatabaseReference changedQuestionReference = QuestionController.receiveAllQuestions();
 
         ValueEventListener receiveUpdatedQuestionsListener = new ValueEventListener() {
@@ -165,7 +155,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * 사용자가 이전에 답변했던 질문 num리스트를 가져옴.
      */
     public void getResponsedNum() {
-        DatabaseReference userIdReference = FirebaseDatabase.getInstance().getReference().child("userhistory").child(mFirebaseUid);
+        DatabaseReference userIdReference = FirebaseDatabase.getInstance().getReference().child("userhistory").child(userId);
 
         ValueEventListener userIdListener = new ValueEventListener() {
             @Override
@@ -216,17 +206,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                 label:
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    question = Question.parseQuestionSnapshot(child);
+                    question = QuestionUtils.parseQuestionDataSnapshot(child);
 
-                    Log.v(TAG, "is end :" + question.isEnd);
-
-                    if(!question.userId.equals(mFirebaseUid)) {
+                    if(!question.getUserId().equals(userId)) {
+                        String num = question.getNum().toString();
                         for (int i = 0; i < numList.size(); i++) {
-                            if (question.num.equals(numList.get(i))) {
+                            if (num.equals(numList.get(i))) {
                                 continue label;
                             }
                         }
-                        if (!question.isEnd) {
+                        if (!question.getIsEnd()) {
                             if (question != null) {
                                 intent.putExtra("question", question);
                                 intent.putExtra("numberList", numberList);
@@ -246,7 +235,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         questionReference.addListenerForSingleValueEvent(questionListener);
     }
-}
 
     public void updateHeaderView(){
         LinearLayout mHeader = (LinearLayout)navigationView.getHeaderView(0);

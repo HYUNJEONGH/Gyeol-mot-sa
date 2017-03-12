@@ -15,22 +15,19 @@ import java.util.Map;
 
 public class NumController {
     private static final String TAG = NumController.class.getSimpleName();
-    private static DatabaseReference dbReference;
-    private static DatabaseReference childReference;
+    private static DatabaseReference numReference;
 
     public static void updateNum(String userId, String num, NumberList numList) {
-        dbReference =  FirebaseDatabase.getInstance().getReference();
-        childReference = dbReference.child("userhistory").child(userId);
-
         final NumberList mNumberList = numList;
+
+        numReference =  FirebaseDatabase.getInstance().getReference().child("userhistory").child(userId);
 
         Map<String, Object> updateValues = mNumberList.maekeNumListMap(num);
 
-        Log.v(TAG, mNumberList.numList);
         Log.v(TAG, "send data to server...");
 
 
-       childReference.updateChildren(updateValues, new DatabaseReference.CompletionListener() {
+        numReference.updateChildren(updateValues, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError error, DatabaseReference reference) {
                 if(error == null) mNumberList.setFinish();

@@ -1,6 +1,7 @@
 package com.teamgms.gms.gms.controllers;
 
 import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -9,8 +10,8 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.teamgms.gms.gms.models.NumberList;
 import com.teamgms.gms.gms.models.Question;
-import com.teamgms.gms.gms.models.ServerConfigure;
 import com.teamgms.gms.gms.utils.QuestionUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class QuestionController {
     * not use transaction
     * */
     public static void updateChoiceNotUseTransaction(Question chkQuest) {
-        Map<String, Object> updateValues = chkQuest.makeQuestionMap();
+        Map<String, Object> updateValues = QuestionUtils.makeQuestionMap(chkQuest);
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/questions/" + chkQuest.getNum(), updateValues);
 
@@ -41,10 +42,9 @@ public class QuestionController {
         final Question mChkQuest = chkQuest;
         final NumberList mNumberList = numberList;
 
-        Log.v(TAG, "numberList" + numberList.getNumList());
         Log.v(TAG, "mNumberList" + mNumberList.getNumList());
 
-        DatabaseReference questionReference = FirebaseDatabase.getInstance().getReference().child("questions").child("question" + mChkQuest.getNum());
+        DatabaseReference questionReference = FirebaseDatabase.getInstance().getReference().child("questions").child("question" + mChkQuest.getNum().toString());
 
         questionReference.runTransaction(new Transaction.Handler() {
             @Override
@@ -55,13 +55,10 @@ public class QuestionController {
                     return Transaction.success(mutableData);
                 }
 
-                question.choice1Count = mChkQuest.getChoice1Count();
-                question.choice2Count = mChkQuest.getChoice2Count();
-                question.choice3Count = mChkQuest.getChoice3Count();
-                question.choice4Count = mChkQuest.getChoice4Count();
-
-                //여기서 쓰는게 맞는지 onComplete안에서 쓰는게 맞는지 테스트 해보기...
-                //NumController.updateNum(mChkQuest.userId, mChkQuest.num);
+                question.setChoice1Count(mChkQuest.getChoice1Count());
+                question.setChoice2Count(mChkQuest.getChoice2Count());
+                question.setChoice3Count(mChkQuest.getChoice3Count());
+                question.setChoice4Count(mChkQuest.getChoice4Count());
 
                 // Set value and report transaction success
                 mutableData.setValue(question);
@@ -73,9 +70,9 @@ public class QuestionController {
                 // Transaction completed
                 Log.d(TAG, "postTransaction:onComplete:" + databaseError);
 
-                //테스팅용
+
                 //userid 유저 아이디 얻어오는 클래스 통해서 얻어오기!
-                NumController.updateNum("123", mChkQuest.num, mNumberList);
+                NumController.updateNum("tempUserId", mChkQuest.getNum().toString(), mNumberList);
             }
         });
     }

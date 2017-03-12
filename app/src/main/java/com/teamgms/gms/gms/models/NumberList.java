@@ -11,17 +11,16 @@ import java.util.Map;
  */
 
 public class NumberList implements Serializable {
-    private static final String TAG = NumberList.class.getSimpleName();
-
     public interface onSendNumCB {
-        public void onSendNum(boolean finish);
+        void onSendNum(boolean finish);
     }
+
+    private static final String TAG = NumberList.class.getSimpleName();
 
     public String numList;
     private onSendNumCB numCallBack;
 
-    public NumberList() {
-    }
+    public NumberList() { numList = ""; }
 
     public NumberList(String numList) {
         this.numList = numList;
@@ -33,18 +32,6 @@ public class NumberList implements Serializable {
 
     public void setFinish() {
         numCallBack.onSendNum(true);
-    }
-
-    public void setNFinish() {
-        numCallBack.onSendNum(false);
-    }
-
-    public String getNumList() {
-        return numList.toString();
-    }
-
-    public void setNumList(String numList) {
-        this.numList = numList;
     }
 
     public Map<String, Object> maekeNumListMap(String num) {
@@ -63,4 +50,17 @@ public class NumberList implements Serializable {
 
         return result;
     }
+
+    public String getNumList() {
+        return numList.toString();
+    }
+
+    public void setNumList(String numList) {
+        this.numList = numList;
+    }
+
+    /*public void setNFinish() {
+        numCallBack.onSendNum(false);
+    }*/
 }
+

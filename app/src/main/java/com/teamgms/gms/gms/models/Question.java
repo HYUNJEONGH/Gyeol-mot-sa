@@ -48,7 +48,7 @@ public class Question implements Serializable {
         this.isChecked = false;
     }
   
-   public Question(String num, String userId, String question, String choice1, String choice2, String choice3, String choice4, Long choice1Count, Long choice2Count, Long choice3Count, Long choice4Count, Boolean isEnd, String endTime, Long endCount) {
+   public Question(Long num, String userId, String question, String choice1, String choice2, String choice3, String choice4, Long choice1Count, Long choice2Count, Long choice3Count, Long choice4Count, Boolean isEnd, String endTime, Long endCount) {
         this.num = num;
         this.userId = userId;
         this.question = question;
