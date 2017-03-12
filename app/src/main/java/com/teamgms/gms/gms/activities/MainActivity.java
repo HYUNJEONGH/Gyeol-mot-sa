@@ -95,13 +95,15 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.v(TAG, "is end :" + question.isEnd);
 
-                    for (int i = 0; i < numList.size(); i++) {
-                        if (question.num.equals(numList.get(i))) {
-                            continue label;
+                    if(!question.userId.equals(mFirebaseUid)) {
+                        for (int i = 0; i < numList.size(); i++) {
+                            if (question.num.equals(numList.get(i))) {
+                                continue label;
+                            }
                         }
-                    }
 
-                    if (!question.isEnd) break;
+                        if (!question.isEnd) break;
+                    }
                 }
 
                 if (question != null) {
