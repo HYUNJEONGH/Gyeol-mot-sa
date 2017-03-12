@@ -1,5 +1,4 @@
 package com.teamgms.gms.gms.models;
-
 import java.io.Serializable;
 
 public class Question implements Serializable {
@@ -48,6 +47,24 @@ public class Question implements Serializable {
         this.endCount = new Long(endCount);
         this.isChecked = false;
     }
+  
+   public Question(String num, String userId, String question, String choice1, String choice2, String choice3, String choice4, Long choice1Count, Long choice2Count, Long choice3Count, Long choice4Count, Boolean isEnd, String endTime, Long endCount) {
+        this.num = num;
+        this.userId = userId;
+        this.question = question;
+        this.choice1 = choice1;
+        this.choice2 = choice2;
+        this.choice3 = choice3;
+        this.choice4 = choice4;
+        this.choice1Count = choice1Count;
+        this.choice2Count = choice2Count;
+        this.choice3Count = choice3Count;
+        this.choice4Count = choice4Count;
+        this.isEnd = isEnd;
+        this.endTime = endTime;
+        this.endCount = endCount;
+    }
+     
 
     public String getUserId() {
         return userId;
@@ -94,6 +111,7 @@ public class Question implements Serializable {
     public String getChoice4() {
         return choice4;
     }
+
     public void setChoice4(String choice4) {
         this.choice4 = choice4;
     }
@@ -108,6 +126,7 @@ public class Question implements Serializable {
     public Long getChoice2Count() {
         return choice2Count;
     }
+
     public void setChoice2Count(Long choice2Count) {
         this.choice2Count = choice2Count;
     }
@@ -115,6 +134,7 @@ public class Question implements Serializable {
     public Long getChoice3Count() {
         return choice3Count;
     }
+
     public void setChoice3Count(Long choice3Count) {
         this.choice3Count = choice3Count;
     }
@@ -122,6 +142,7 @@ public class Question implements Serializable {
     public Long getChoice4Count() {
         return choice4Count;
     }
+
     public void setChoice4Count(Long choice4Count) {
         this.choice4Count = choice4Count;
     }
@@ -132,10 +153,11 @@ public class Question implements Serializable {
     public void setIsEnd(Boolean end) {
         isEnd = end;
     }
-
+  
     public String getEndTime() {
         return endTime;
     }
+
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
@@ -143,6 +165,7 @@ public class Question implements Serializable {
     public Long getEndCount() {
         return endCount;
     }
+
     public void setEndCount(Long endCount) {
         this.endCount = endCount;
     }
