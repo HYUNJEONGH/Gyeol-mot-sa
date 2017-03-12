@@ -10,7 +10,16 @@
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+          
+                <Button
+                  android:id="@+id/btn_sendQuestionActivity"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Send Question"
+                  android:onClick="onClick"/>
+          
+        </FrameLayout>
         <!-- The navigation drawer -->
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
