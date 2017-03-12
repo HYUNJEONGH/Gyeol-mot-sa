@@ -1,53 +1,54 @@
 package com.teamgms.gms.gms.models;
-
-import com.google.firebase.database.DataSnapshot;
-
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Created by hello_DE on 2017-03-04.
- */
 
 public class Question implements Serializable {
+    private String userId;
 
-    public String num;
+    private Long num;
+    private String question;
 
-    public String userId;
-    public String question;
+    private String choice1;
+    private String choice2;
+    private String choice3;
+    private String choice4;
 
-    public String choice1;
-    public String choice2;
-    public String choice3;
-    public String choice4;
+    private Long choice1Count;
+    private Long choice2Count;
+    private Long choice3Count;
+    private Long choice4Count;
 
-    public Long choice1Count;
-    public Long choice2Count;
-    public Long choice3Count;
-    public Long choice4Count;
+    private Boolean isEnd;
+    private String endTime;
+    private Long endCount;
 
-    public Boolean isEnd;
-    public String endTime;
-    public Long endCount;
+    private Boolean isChecked;
 
     public Question() {
+        choice1Count = new Long(0);
+        choice2Count = new Long(0);
+        choice3Count = new Long(0);
+        choice4Count = new Long(0);
+        this.isEnd = false;
+        this.isChecked = false;
     }
-
-    public Question(String num, String userId, String question, String choice1, String choice2, String choice3, String choice4, Boolean isEnd, String endTime, Long endCount) {
-        this.num = num;
+    public Question(String userId, String question, String choice1, String choice2, String choice3, String choice4, Boolean isEnd, String endTime, long endCount) {
         this.userId = userId;
         this.question = question;
         this.choice1 = choice1;
         this.choice2 = choice2;
         this.choice3 = choice3;
         this.choice4 = choice4;
+        choice1Count = new Long(0);
+        choice2Count = new Long(0);
+        choice3Count = new Long(0);
+        choice4Count = new Long(0);
         this.isEnd = isEnd;
         this.endTime = endTime;
-        this.endCount = endCount;
+        this.endCount = new Long(endCount);
+        this.isChecked = false;
     }
-
-    public Question(String num, String userId, String question, String choice1, String choice2, String choice3, String choice4, Long choice1Count, Long choice2Count, Long choice3Count, Long choice4Count, Boolean isEnd, String endTime, Long endCount) {
+  
+   public Question(String num, String userId, String question, String choice1, String choice2, String choice3, String choice4, Long choice1Count, Long choice2Count, Long choice3Count, Long choice4Count, Boolean isEnd, String endTime, Long endCount) {
         this.num = num;
         this.userId = userId;
         this.question = question;
@@ -63,103 +64,116 @@ public class Question implements Serializable {
         this.endTime = endTime;
         this.endCount = endCount;
     }
-
-    public Map<String, Object> makeQuestionMap() {
-        HashMap<String, Object> result = new HashMap<String, Object>();
-
-        result.put("num", num);
-        result.put("userId", userId);
-        result.put("question", question);
-        result.put("choice1", choice1);
-        result.put("choice2", choice2);
-        result.put("choice3", choice3);
-        result.put("choice4", choice4);
-        result.put("choice1Count", choice1Count);
-        result.put("choice2Count", choice2Count);
-        result.put("choice3Count", choice3Count);
-        result.put("choice4Count", choice4Count);
-        result.put("isEnd", isEnd);
-        result.put("endTime", endTime);
-        result.put("endCount", endCount);
-
-        return result;
-    }
-
-    public static Question parseQuestionSnapshot(DataSnapshot dataSnapshot) {
-        Question question = new Question();
-
-        question.num = (String)dataSnapshot.child("num").getValue();
-        question.userId = (String)dataSnapshot.child("userId").getValue();
-        question.question = (String)dataSnapshot.child("question").getValue();
-        question.choice1 = (String)dataSnapshot.child("choice1").getValue();
-        question.choice2 = (String)dataSnapshot.child("choice2").getValue();
-        question.choice3 = (String)dataSnapshot.child("choice3").getValue();
-        question.choice4 = (String)dataSnapshot.child("choice4").getValue();
-        question.choice1Count = (Long)dataSnapshot.child("choice1Count").getValue();
-        question.choice2Count = (Long)dataSnapshot.child("choice2Count").getValue();
-        question.choice3Count = (Long)dataSnapshot.child("choice3Count").getValue();
-        question.choice4Count = (Long)dataSnapshot.child("choice4Count").getValue();
-        question.isEnd = (Boolean) dataSnapshot.child("isEnd").getValue();
-        question.endTime = (String)dataSnapshot.child("endTime").getValue();
-        question.endCount = (Long)dataSnapshot.child("endCount").getValue();
-
-        return question;
-    }
-
-    public String getNum() {
-        return num;
-    }
+     
 
     public String getUserId() {
         return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Long getNum() {
+        return num;
+    }
+    public void setNum(Long num) {
+        this.num = num;
     }
 
     public String getQuestion() {
         return question;
     }
+    public void setQuestion(String question) {
+        this.question = question;
+    }
 
     public String getChoice1() {
         return choice1;
+    }
+    public void setChoice1(String choice1) {
+        this.choice1 = choice1;
     }
 
     public String getChoice2() {
         return choice2;
     }
+    public void setChoice2(String choice2) {
+        this.choice2 = choice2;
+    }
 
     public String getChoice3() {
         return choice3;
+    }
+    public void setChoice3(String choice3) {
+        this.choice3 = choice3;
     }
 
     public String getChoice4() {
         return choice4;
     }
 
+    public void setChoice4(String choice4) {
+        this.choice4 = choice4;
+    }
+
     public Long getChoice1Count() {
         return choice1Count;
+    }
+    public void setChoice1Count(Long choice1Count) {
+        this.choice1Count = choice1Count;
     }
 
     public Long getChoice2Count() {
         return choice2Count;
     }
 
+    public void setChoice2Count(Long choice2Count) {
+        this.choice2Count = choice2Count;
+    }
+
     public Long getChoice3Count() {
         return choice3Count;
+    }
+
+    public void setChoice3Count(Long choice3Count) {
+        this.choice3Count = choice3Count;
     }
 
     public Long getChoice4Count() {
         return choice4Count;
     }
 
-    public Boolean getEnd() {
-        return isEnd;
+    public void setChoice4Count(Long choice4Count) {
+        this.choice4Count = choice4Count;
     }
 
+    public Boolean getIsEnd() {
+        return isEnd;
+    }
+    public void setIsEnd(Boolean end) {
+        isEnd = end;
+    }
+  
     public String getEndTime() {
         return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public Long getEndCount() {
         return endCount;
     }
 
+    public void setEndCount(Long endCount) {
+        this.endCount = endCount;
+    }
+
+    public Boolean getIsChecked() {
+        return isChecked;
+    }
+    public void setIsChecked(Boolean checked) {
+        isChecked = checked;
+    }
 }
