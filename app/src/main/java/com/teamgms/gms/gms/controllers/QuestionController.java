@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.teamgms.gms.gms.models.NumberList;
 import com.teamgms.gms.gms.models.Question;
 
 import java.util.HashMap;
@@ -36,8 +37,12 @@ public class QuestionController {
     /*
     * use transaction
     * */
-    public static void updateChoice(Question chkQuest) {
+    public static void updateChoice(Question chkQuest, NumberList numberList) {
         final Question mChkQuest = chkQuest;
+        final NumberList mNumberList = numberList;
+
+        Log.v(TAG, "numberList" + numberList.getNumList());
+        Log.v(TAG, "mNumberList" + mNumberList.getNumList());
 
         DatabaseReference questionReference = FirebaseDatabase.getInstance().getReference().child("questions").child("question" + mChkQuest.getNum());
 
@@ -68,22 +73,10 @@ public class QuestionController {
                 // Transaction completed
                 Log.d(TAG, "postTransaction:onComplete:" + databaseError);
 
-                NumController.updateNum(mChkQuest.userId, mChkQuest.num);
+                //테스팅용
+                //userid 유저 아이디 얻어오는 클래스 통해서 얻어오기!
+                NumController.updateNum("123", mChkQuest.num, mNumberList);
             }
         });
     }
-
-
-    //테스트용
-    public static void createQuestion(String num, String userId, String question, String choice1, String choice2, String choice3, String choice4, Long choice1Count, Long choice2Count, Long choice3Count, Long choice4Count, Boolean isEnd, String endTIme, Long endCount) {
-
-        Question newQuestion = new Question(num, userId, question, choice1, choice2, choice3, choice4, choice1Count, choice2Count, choice3Count, choice4Count, isEnd, endTIme, endCount);
-        final Map<String, Object> newQuestionValues = newQuestion.makeQuestionMap();
-
-        Map<String, Object> newQuestionMap = new HashMap<>();
-        newQuestionMap.put("/questions/question" + num, newQuestionValues);
-
-        FirebaseDatabase.getInstance().getReference().updateChildren(newQuestionMap);
-    }
-
 }

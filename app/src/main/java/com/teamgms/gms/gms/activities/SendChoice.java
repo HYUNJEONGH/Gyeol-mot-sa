@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.teamgms.gms.gms.R;
 import com.teamgms.gms.gms.controllers.QuestionController;
+import com.teamgms.gms.gms.models.NumberList;
 import com.teamgms.gms.gms.models.Question;
 
 /**
@@ -26,6 +27,7 @@ public class SendChoice extends AppCompatActivity {
     private TextView tv_question;
 
     Question chkQuest;
+    NumberList numberList;
     private int choice; //user decision
     private Long count;  //total user decision
 
@@ -34,10 +36,19 @@ public class SendChoice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_choice);
 
+        Log.v(TAG, "start SendChoice");
+
         chkQuest = (Question)getIntent().getSerializableExtra("question");
+        numberList = (NumberList)getIntent().getSerializableExtra("numberList");
+
 
         if(chkQuest == null) {
             Log.v(TAG, "intent error...");
+            finish();
+        }
+
+        if(numberList == null) {
+            Log.v(TAG, "intent error... numberList");
             finish();
         }
 
@@ -58,7 +69,19 @@ public class SendChoice extends AppCompatActivity {
         rb_two.setText(chkQuest.choice2);
         rb_three.setText(chkQuest.choice3);
         rb_four.setText(chkQuest.choice4);
+
+        numberList.setOnSendNumCB(callBack);
     }
+
+    NumberList.onSendNumCB callBack = new NumberList.onSendNumCB()  {
+        @Override
+        public void onSendNum(boolean finish) {
+            if(finish) {
+                Log.v(TAG, "ACTIVITY FINISH");
+                finish();
+            }
+        }
+    };
 
     /**
      * operates when the user selects the radio button.
@@ -116,9 +139,7 @@ public class SendChoice extends AppCompatActivity {
 
                 chkQuest.endCount = chkQuest.endCount - 1;
 
-                QuestionController.updateChoice(chkQuest);
-
-                finish();
+                QuestionController.updateChoice(chkQuest, numberList);
             }
         }
     }

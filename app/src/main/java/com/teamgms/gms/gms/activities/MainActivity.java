@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,7 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamgms.gms.gms.R;
-import com.teamgms.gms.gms.controllers.NumController;
+import com.teamgms.gms.gms.models.NumberList;
 import com.teamgms.gms.gms.models.Question;
 
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String mFirebaseUid;
     private ArrayList<String> numList;
+    private NumberList numberList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,20 +32,26 @@ public class MainActivity extends AppCompatActivity {
         //UserUtil 클래스가 아직 없어서 주석처리.
         //mFirebaseUid = UserUtil.loadUserFirebaseUid(this);
 
+        //테스트용
+        mFirebaseUid = "123";
+
         numList = new ArrayList<String> ();
+        numberList = new NumberList();
+        numberList.setNumList("");
+
+        //numberList.setNFinish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         getResponsedNum();
     }
 
-    //testing
-    public void onClick(View v) {
-        if(v.getId() == R.id.btn_test) {
-            Intent i = new Intent(this, TestActivity.class);
-            Log.d(TAG, "TEST START");
-            startActivity(i);
-        }
-    }
-
+    /**
+     * 사용자가 이전에 답변했던 질문 num리스트를 가져옴.
+     */
     public void getResponsedNum() {
         DatabaseReference userIdReference = FirebaseDatabase.getInstance().getReference().child("userhistory").child(mFirebaseUid);
 
@@ -53,13 +59,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String nums = (String)dataSnapshot.child("nums").getValue();
-                NumController.setNum(nums);
 
-                StringTokenizer st = new StringTokenizer(nums, "%");
+                if(nums != null) {
+                    Log.v(TAG, "numList setting...");
+                    numberList.setNumList(nums);
 
-                while(st.hasMoreTokens()) {
-                    numList.add(st.nextToken());
+                    StringTokenizer st = new StringTokenizer(nums, "%");
+
+                    while (st.hasMoreTokens()) {
+                        numList.add(st.nextToken());
+                    }
                 }
+                else {
+                    Log.v(TAG, "numList is null...");
+                }
+
+                getQuestion();
             }
 
             @Override
@@ -68,16 +83,13 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        userIdReference.addListenerForSingleValueEvent(userIdListener);
+        userIdReference.addValueEventListener(userIdListener);
     }
 
-    /*
-    *
-    * */
-    @Override
-    protected void onStart() {
-        super.onStart();
-
+    /**
+     * db내 질문들 가져옴.
+     */
+    public void getQuestion() {
         final Intent intent = new Intent(this, SendChoice.class);
 
         DatabaseReference questionReference = FirebaseDatabase.getInstance().getReference().child("questions");
@@ -101,15 +113,15 @@ public class MainActivity extends AppCompatActivity {
                                 continue label;
                             }
                         }
-
-                        if (!question.isEnd) break;
+                        if (!question.isEnd) {
+                            if (question != null) {
+                                intent.putExtra("question", question);
+                                intent.putExtra("numberList", numberList);
+                                Log.d(TAG, "GET QUESTION, START ACTIVITY");
+                                startActivity(intent);
+                            }
+                        }
                     }
-                }
-
-                if (question != null) {
-                    intent.putExtra("question", question);
-                    Log.d(TAG, "GET QUESTION, START ACTIVITY");
-                    startActivity(intent);
                 }
             }
 
@@ -119,8 +131,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        //테스팅
         questionReference.addListenerForSingleValueEvent(questionListener);
-        //questionReference.addValueEventListener(questionListener);
     }
 }
