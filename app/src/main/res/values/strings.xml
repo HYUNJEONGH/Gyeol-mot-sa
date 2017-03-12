@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">gms</string>
+    <string name="facebook_app_id">1807842842874101</string>
+    <string name="app_name">결못사</string>
+    <string name="loading">loading...</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="nav_my_page">My Page</string>
+    <string name="nav_my_question">My Question</string>
+    <string name="nav_settings">Settings</string>
+    <string name="signout">SignOut</string>
+    <string name="login">Login</string>
+    <string name="revoke_msg">새 계정 연결</string>
 </resources>
