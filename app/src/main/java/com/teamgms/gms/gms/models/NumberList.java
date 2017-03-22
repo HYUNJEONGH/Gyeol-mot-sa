@@ -17,12 +17,27 @@ public class NumberList implements Serializable {
 
     private static final String TAG = NumberList.class.getSimpleName();
 
-    public String numList;
+    private String userId;
+    private String numList;
     private onSendNumCB numCallBack;
 
     public NumberList() { numList = ""; }
 
     public NumberList(String numList) {
+        this.numList = numList;
+    }
+
+    public String getUserId() {
+        return userId.toString();
+    }
+    public String getNumList() {
+        return numList.toString();
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    public void setNumList(String numList) {
         this.numList = numList;
     }
 
@@ -49,14 +64,6 @@ public class NumberList implements Serializable {
         result.put("nums", numList);
 
         return result;
-    }
-
-    public String getNumList() {
-        return numList.toString();
-    }
-
-    public void setNumList(String numList) {
-        this.numList = numList;
     }
 
     /*public void setNFinish() {

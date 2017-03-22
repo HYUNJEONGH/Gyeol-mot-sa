@@ -15,9 +15,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.teamgms.gms.gms.BaseActivity;
 import com.teamgms.gms.gms.Config;
 import com.teamgms.gms.gms.R;
+import com.teamgms.gms.gms.adapters.NRQuestionAdapter;
 import com.teamgms.gms.gms.controllers.QuestionController;
 import com.teamgms.gms.gms.controllers.ServerConfigureController;
 import com.teamgms.gms.gms.models.NumberList;
@@ -51,6 +54,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static String userId;
     private ArrayList<String> numList;
     private NumberList numberList;
+
     final static int FLAG_GET_SERVERCONFIGURE = 100;
     long totalQuestionNumber = 0;
 
@@ -67,17 +71,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     Unbinder unbinder;
     Bundle bundle;
     private User userInfo;
-  
+
+    final static int NR_QUESTION_LIST_SIZE = 10;
+    private ArrayList<Question> nrQuesetionList;
+    private ListView lv_questionList;
+    private NRQuestionAdapter nrQuestionAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        numList = new ArrayList<String> ();
-        numberList = new NumberList();
-        //numberList.setNFinish();
+        nrQuesetionList = new ArrayList<Question>();
+        lv_questionList = (ListView)findViewById(R.id.lv_questionList);
+        nrQuestionAdapter = new NRQuestionAdapter(this, R.layout.no_response_question_item, nrQuesetionList);
+        lv_questionList.setAdapter(nrQuestionAdapter);
 
-        userId = "tempUserId";
+        //userId = "tempUserId";
 
         ServerConfigureController.getServerConfigure(serverConfigureHandler);
       
@@ -88,6 +98,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if(bundle != null) {
           userInfo = (User)bundle.getSerializable(Config.USER);
         }
+
+        userId = userInfo.firebaseUid;
+
+        numList = new ArrayList<String> ();
+        numberList = new NumberList();
+        //numberList.setNFinish();
+        numberList.setUserId(userInfo.firebaseUid);
 
         //home activity navigation drawer
 
@@ -104,6 +121,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mDrawerToggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        lv_questionList.setOnItemClickListener(nrQeuestionClick);
 
         updateHeaderView();
     }
@@ -193,8 +212,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * db내 질문들 가져옴.
      */
     public void getQuestion() {
-        final Intent intent = new Intent(this, SendChoice.class);
-
         DatabaseReference questionReference = FirebaseDatabase.getInstance().getReference().child("questions");
 
         ValueEventListener questionListener = new ValueEventListener() {
@@ -217,14 +234,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         }
                         if (!question.getIsEnd()) {
                             if (question != null) {
-                                intent.putExtra("question", question);
-                                intent.putExtra("numberList", numberList);
-                                Log.d(TAG, "GET QUESTION, START ACTIVITY");
-                                startActivity(intent);
+                                nrQuesetionList.add(question);
+                                if(nrQuesetionList.size() == NR_QUESTION_LIST_SIZE)
+                                    break label;
                             }
                         }
                     }
                 }
+
+                nrQuestionAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -235,6 +253,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         questionReference.addListenerForSingleValueEvent(questionListener);
     }
+
+    /*
+    * 사용자가 리스트뷰에서 응답하고싶은 질문 선택시 동작
+    * */
+    AdapterView.OnItemClickListener nrQeuestionClick = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent intent = new Intent(MainActivity.this, SendChoice.class);
+            intent.putExtra("question", nrQuesetionList.get(position));
+            intent.putExtra("numberList", numberList);
+            Log.d(TAG, "GET QUESTION, START ACTIVITY");
+            startActivity(intent);
+        }
+    };
 
     public void updateHeaderView(){
         LinearLayout mHeader = (LinearLayout)navigationView.getHeaderView(0);
@@ -263,6 +295,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        nrQuesetionList.clear();
         unbinder.unbind();
     }
 

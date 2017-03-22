@@ -69,10 +69,8 @@ public class QuestionController {
                                    DataSnapshot dataSnapshot) {
                 // Transaction completed
                 Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-
-
-                //userid 유저 아이디 얻어오는 클래스 통해서 얻어오기!
-                NumController.updateNum("tempUserId", mChkQuest.getNum().toString(), mNumberList);
+                
+                NumController.updateNum(mChkQuest.getNum().toString(), mNumberList);
             }
         });
     }

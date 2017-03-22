@@ -17,10 +17,10 @@ public class NumController {
     private static final String TAG = NumController.class.getSimpleName();
     private static DatabaseReference numReference;
 
-    public static void updateNum(String userId, String num, NumberList numList) {
+    public static void updateNum(String num, NumberList numList) {
         final NumberList mNumberList = numList;
 
-        numReference =  FirebaseDatabase.getInstance().getReference().child("userhistory").child(userId);
+        numReference =  FirebaseDatabase.getInstance().getReference().child("userhistory").child(mNumberList.getUserId());
 
         Map<String, Object> updateValues = mNumberList.maekeNumListMap(num);
 
