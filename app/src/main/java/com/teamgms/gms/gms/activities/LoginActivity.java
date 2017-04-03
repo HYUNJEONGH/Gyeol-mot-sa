@@ -1,6 +1,8 @@
 package com.teamgms.gms.gms.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -33,6 +35,7 @@ import com.teamgms.gms.gms.Config;
 import com.teamgms.gms.gms.R;
 import com.teamgms.gms.gms.controllers.UserController;
 import com.teamgms.gms.gms.models.User;
+import com.teamgms.gms.gms.utils.AccountUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,7 +103,9 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
                 if(user != null) {
                     // User is signed in
                     User user1 = new User(user.getProviderId(), user.getUid(), user.getEmail(), user.getDisplayName(), user.getPhotoUrl().toString());
-//                    SharedPreferences preferences = getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                    //USERID stored
+                    AccountUtils utils = new AccountUtils();
+                    utils.setFirebaseUid(LoginActivity.this, user.getUid());
                     intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra(Config.USER, user1);
                     startActivity(intent);

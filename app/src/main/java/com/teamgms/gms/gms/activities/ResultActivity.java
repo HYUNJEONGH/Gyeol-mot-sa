@@ -74,7 +74,7 @@ public class ResultActivity extends AppCompatActivity {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_ok:
-                result.setIsChecked(new Boolean(true));
+                result.setChecked(new Boolean(true));
                 QuestionController.insertQuestion(result);
 
                 finish();

@@ -135,7 +135,7 @@ public class SendChoice extends AppCompatActivity {
                 }
                 count = count+ 1;
 
-                chkQuest.setIsChecked(false);
+                chkQuest.setChecked(false);
 
                 QuestionController.updateChoice(chkQuest, numberList);
             }

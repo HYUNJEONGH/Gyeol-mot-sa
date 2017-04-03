@@ -10,4 +10,7 @@ public class Config {
     public static final String SHARED_PREF_NAME = "pref";
 
     public static final String USER = "user";
+
+    public static final String SHARED_USERID = "userid";
+
 }

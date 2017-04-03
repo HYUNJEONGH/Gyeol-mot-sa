@@ -86,11 +86,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         bundle = getIntent().getExtras();
         if(bundle != null) {
-          userInfo = (User)bundle.getSerializable(Config.USER);
+            userInfo = (User)bundle.getSerializable(Config.USER);
         }
 
         //home activity navigation drawer
-
 //        mTitle = mDrawerTitle = getTitle();
 
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -99,7 +98,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 toolbar,/* DrawerLayout object */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
-            );
+        );
+
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
@@ -126,9 +126,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     updatedQuestion = QuestionUtils.parseQuestionDataSnapshot((DataSnapshot)updatedQuestionIterator.next());
 
                     if(updatedQuestion.getChoice1Count() + updatedQuestion.getChoice2Count() + updatedQuestion.getChoice3Count() + updatedQuestion.getChoice4Count() == updatedQuestion.getEndCount())
-                        updatedQuestion.setIsEnd(new Boolean(true));
+                        updatedQuestion.setEnd(new Boolean(true));
 
-                    if ((updatedQuestion.getUserId()).equals(userId) && updatedQuestion.getIsEnd() && !updatedQuestion.getIsChecked()) {
+                    if ((updatedQuestion.getUserId()).equals(userId) && updatedQuestion.getEnd() && !updatedQuestion.getChecked()) {
                         Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                         intent.putExtra("result", updatedQuestion);
                         startActivity(intent);
@@ -215,7 +215,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                 continue label;
                             }
                         }
-                        if (!question.getIsEnd()) {
+                        if (!question.getEnd()) {
                             if (question != null) {
                                 intent.putExtra("question", question);
                                 intent.putExtra("numberList", numberList);

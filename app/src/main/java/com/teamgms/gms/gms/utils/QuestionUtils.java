@@ -21,10 +21,10 @@ public class QuestionUtils {
         questionMap.put("choice2Count", question.getChoice2Count());
         questionMap.put("choice3Count", question.getChoice3Count());
         questionMap.put("choice4Count", question.getChoice4Count());
-        questionMap.put("isEnd", question.getIsEnd());
+        questionMap.put("isEnd", question.getEnd());
         questionMap.put("endTime", question.getEndTime());
         questionMap.put("endCount", question.getEndCount());
-        questionMap.put("isChecked", question.getIsChecked());
+        questionMap.put("isChecked", question.getChecked());
 
         return questionMap;
     }
@@ -43,10 +43,10 @@ public class QuestionUtils {
         question.setChoice2Count((Long)dataSnapshot.child("choice2Count").getValue());
         question.setChoice3Count((Long)dataSnapshot.child("choice3Count").getValue());
         question.setChoice4Count((Long)dataSnapshot.child("choice4Count").getValue());
-        question.setIsEnd((Boolean)dataSnapshot.child("isEnd").getValue());
+        question.setEnd((Boolean)dataSnapshot.child("isEnd").getValue());
         question.setEndTime((String)dataSnapshot.child("endTime").getValue());
         question.setEndCount((Long)dataSnapshot.child("endCount").getValue());
-        question.setIsChecked((Boolean)dataSnapshot.child("isChecked").getValue());
+        question.setChecked((Boolean)dataSnapshot.child("isChecked").getValue());
 
         return question;
     }
