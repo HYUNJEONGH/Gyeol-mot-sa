@@ -156,11 +156,11 @@ public class Question extends RealmObject implements Serializable {
         this.choice4Count = choice4Count;
     }
 
-    public Boolean getEnd() {
+    public Boolean getIsEnd() {
         return isEnd;
     }
 
-    public void setEnd(Boolean end) {
+    public void setIsEnd(Boolean end) {
         isEnd = end;
     }
 
@@ -180,11 +180,11 @@ public class Question extends RealmObject implements Serializable {
         this.endCount = endCount;
     }
 
-    public Boolean getChecked() {
+    public Boolean getIsChecked() {
         return isChecked;
     }
 
-    public void setChecked(Boolean checked) {
+    public void setIsChecked(Boolean checked) {
         isChecked = checked;
     }
 }

@@ -1,8 +1,6 @@
 package com.teamgms.gms.gms.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -102,14 +100,14 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null) {
                     // User is signed in
-                    User user1 = new User(user.getProviderId(), user.getUid(), user.getEmail(), user.getDisplayName(), user.getPhotoUrl().toString());
+                    User signedUser = new User(user.getProviderId(), user.getUid(), user.getEmail(), user.getDisplayName(), user.getPhotoUrl().toString());
                     //USERID stored
                     AccountUtils utils = new AccountUtils();
                     utils.setFirebaseUid(LoginActivity.this, user.getUid());
                     intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra(Config.USER, user1);
+                    intent.putExtra(Config.USER, signedUser);
                     startActivity(intent);
-                    UserController.createUser(user1);
+                    UserController.createUser(signedUser);
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out

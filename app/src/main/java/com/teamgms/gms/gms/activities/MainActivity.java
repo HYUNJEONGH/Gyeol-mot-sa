@@ -126,9 +126,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     updatedQuestion = QuestionUtils.parseQuestionDataSnapshot((DataSnapshot)updatedQuestionIterator.next());
 
                     if(updatedQuestion.getChoice1Count() + updatedQuestion.getChoice2Count() + updatedQuestion.getChoice3Count() + updatedQuestion.getChoice4Count() == updatedQuestion.getEndCount())
-                        updatedQuestion.setEnd(new Boolean(true));
+                        updatedQuestion.setIsEnd(new Boolean(true));
 
-                    if ((updatedQuestion.getUserId()).equals(userId) && updatedQuestion.getEnd() && !updatedQuestion.getChecked()) {
+                    if ((updatedQuestion.getUserId()).equals(userId) && updatedQuestion.getIsEnd() && !updatedQuestion.getIsChecked()) {
                         Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                         intent.putExtra("result", updatedQuestion);
                         startActivity(intent);
@@ -215,7 +215,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                 continue label;
                             }
                         }
-                        if (!question.getEnd()) {
+                        if (!question.getIsEnd()) {
                             if (question != null) {
                                 intent.putExtra("question", question);
                                 intent.putExtra("numberList", numberList);
@@ -303,6 +303,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
         if(id == R.id.nav_myPage) {
 
+        } else if (id == R.id.nav_myQuestionList) {
+            Intent intent = new Intent(this, MyQuestionActivity.class);
+            startActivity(intent);
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;

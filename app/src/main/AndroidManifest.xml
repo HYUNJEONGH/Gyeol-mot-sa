@@ -15,24 +15,17 @@
             android:value="@string/facebook_app_id" />
 
         <activity android:name=".activities.LoginActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".activities.SendQuestionActivity" />
         <activity android:name=".activities.ResultActivity"></activity>
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme"></activity>
-        <activity android:name=".activities.MyQuestionActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".activities.MyQuestionActivity"/>
     </application>
 
 </manifest>
